@@ -1,0 +1,8 @@
+node_modules/
+scratch/
+.gemini/
+*.pdf
+# Keeping only the compressed PDF if requested, but usually PDFs are too large for git.
+# User wants the real magazine, so I'll keep the PDFs? 
+# Actually, 23MB is okay for a single commit but not ideal.
+# I'll leave the PDFs out of .gitignore for now as the user wants the "real magazine".
