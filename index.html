@@ -259,6 +259,21 @@
       color: var(--gold);
     }
 
+    /* Heartbeat Animation */
+    @keyframes heartbreath {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+    @keyframes heartbeatwaves {
+      0% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.7); }
+      70% { box-shadow: 0 0 0 20px rgba(201, 168, 76, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0); }
+    }
+    .btn-heartbeat {
+      animation: heartbreath 1.5s infinite ease-in-out, heartbeatwaves 2s infinite ease-out;
+      border: none !important;
+    }
+
     .hero-floater {
       position: absolute;
       right: 4rem;
@@ -1193,7 +1208,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      padding: 4rem 2rem 8rem;
       overflow: auto;
       cursor: grab;
       -webkit-overflow-scrolling: touch;
@@ -1207,7 +1222,7 @@
       width: 100%;
       height: 100%;
       max-width: 1200px;
-      max-height: 800px;
+      max-height: 82vh;
       margin: auto;
       box-shadow: 0 50px 100px rgba(0,0,0,0.8);
       transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1347,22 +1362,22 @@
     <h1>Zimbabwe's <em>Premier</em><br>Business Voice</h1>
     <p class="hero-sub">Inspire • Inform • Empower SMEs — The voice of Zimbabwe's SMEs, Policy &amp; Business Growth. Delivering clarity, credibility and actionable intelligence for growth, networking and success.</p>
     <div class="hero-actions">
-      <a href="javascript:void(0)" class="btn-primary" onclick="openMagazine()">Read the Magazine</a>
+      <a href="javascript:void(0)" id="btn-read-magazine" class="btn-primary" onclick="openMagazine()">Read the Magazine</a>
       <a href="#newsletter" class="btn-secondary">Get Notified</a>
     </div>
   </div>
   <div class="hero-floater">
     <div class="stat-card">
-      <span class="num">2026</span>
-      <span class="label">Return Edition</span>
+      <span class="num counter" data-target="9" data-suffix="+">0</span>
+      <span class="label">Years of Impact</span>
     </div>
     <div class="stat-card">
-      <span class="num">4×</span>
+      <span class="num counter" data-target="4">0</span>
       <span class="label">Issues Per Year</span>
     </div>
     <div class="stat-card">
-      <span class="num">SME</span>
-      <span class="label">Focused Content</span>
+      <span class="num counter" data-target="60000" data-suffix="+">0</span>
+      <span class="label">SMEs in Zimbabwe</span>
     </div>
   </div>
   <div class="hero-stripe"></div>
@@ -2120,7 +2135,7 @@
     try {
       await new Promise(r => setTimeout(r, 200));
       
-      const filePaths = ['The New Economy Compressed.pdf', 'The New Economy Full.pdf'];
+      const filePaths = ['The New Economy Full_compressed.pdf', 'The New Economy Compressed.pdf', 'The New Economy Full.pdf'];
       let pdfDoc = null;
 
       for (const path of filePaths) {
@@ -2175,7 +2190,7 @@
         minWidth: 315,
         maxWidth: 1000,
         minHeight: 420,
-        maxHeight: 1350,
+        maxHeight: 1200,
         maxShadowOpacity: 0.5,
         showCover: true,
         mobileScrollSupport: true,
@@ -2228,6 +2243,49 @@
     document.body.style.overflow = '';
     resetZoom();
   }
+
+  // --- UI Enhancements: Heartbeat & Counter ---
+  const RELEASE_DATE = new Date('2026-04-22');
+  const btnMagazine = document.getElementById('btn-read-magazine');
+  
+  // Heartbeat logic (14 days)
+  const diffTime = Math.abs(new Date() - RELEASE_DATE);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays <= 14) {
+    btnMagazine.classList.add('btn-heartbeat');
+  }
+
+  // Counter logic
+  const animateCounter = (el) => {
+    const target = +el.getAttribute('data-target');
+    const suffix = el.getAttribute('data-suffix') || '';
+    const speed = 1500; // 1.5s
+    let start = 0;
+    const startTime = performance.now();
+
+    const update = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / speed, 1);
+      // Ease out expo
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      const val = Math.floor(ease * target);
+      el.innerText = val.toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.counter').forEach(animateCounter);
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  
+  const statsSection = document.querySelector('.hero-floater');
+  if (statsSection) observer.observe(statsSection);
 </script>
 </body>
 </html>
