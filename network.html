@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Strategic Network – The New Economy Magazine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C96A;
+      --gold-dark: #9A7A2E;
+      --navy: #0B1C3D;
+      --navy-mid: #152d5e;
+      --navy-light: #1E3A6E;
+      --black: #080C14;
+      --white: #F5F0E8;
+      --grey: #A8A49C;
+      --text: #E8E4DC;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Noise Overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(8, 12, 20, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
+    .nav-logo-text span:first-child { font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; }
+    .nav-logo-text span:last-child { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 900; color: var(--white); }
+    .btn-back { color: var(--grey); text-decoration: none; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; transition: color 0.3s; }
+    .btn-back:hover { color: var(--gold); }
+
+    /* Header Section */
+    .network-hero {
+      padding: 10rem 4rem 4rem;
+      background: radial-gradient(circle at 50% 0%, var(--navy-mid), transparent);
+      text-align: center;
+    }
+    .network-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+    .network-hero h1 em { color: var(--gold); font-style: italic; }
+    .mission-box {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 3rem;
+      position: relative;
+    }
+    .mission-box p { font-size: 1.1rem; font-weight: 300; color: var(--grey); }
+    .mission-box strong { color: var(--white); font-weight: 600; }
+
+    /* Grid Section */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      text-align: center;
+      margin: 4rem 0 2rem;
+      color: var(--gold);
+    }
+
+    .ecosystem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      padding: 0 4rem 6rem;
+    }
+
+    .stakeholder-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(201,168,76,0.1);
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+    .stakeholder-card:hover {
+      background: rgba(201,168,76,0.05);
+      border-color: var(--gold);
+      transform: translateY(-5px);
+    }
+    .stakeholder-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(201,168,76,0.2);
+    }
+    .stakeholder-card ul { list-style: none; }
+    .stakeholder-card li {
+      font-size: 0.85rem;
+      margin-bottom: 0.6rem;
+      color: var(--grey);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .stakeholder-card li::before { content: '•'; color: var(--gold); }
+
+    /* Distribution Channels Section */
+    .distribution {
+      background: var(--navy);
+      padding: 6rem 4rem;
+      text-align: center;
+    }
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .channel-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .channel-icon {
+      width: 60px; height: 60px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .channel-item span { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); font-weight: 600; }
+
+    /* Mobile */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      .network-hero { padding: 8rem 2rem 3rem; }
+      .ecosystem-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        padding: 0 2rem 4rem;
+        display: none; /* Hidden on mobile, replaced by accordions */
+      }
+      .distribution { padding: 4rem 2rem; }
+      .channels-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Accordion styles for mobile */
+    .mobile-accordions {
+      display: none;
+      padding: 0 2rem 4rem;
+    }
+    @media (max-width: 900px) {
+      .mobile-accordions {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* User request: align equally in row and column */
+        gap: 0.5rem;
+      }
+    }
+    .accordion-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+    .accordion-header {
+      padding: 1.5rem 1rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+      min-height: 80px;
+    }
+    .accordion-content {
+      display: none;
+      padding: 0 1rem 1.5rem;
+      background: rgba(0,0,0,0.2);
+      grid-column: span 2; /* Content expands full width */
+    }
+    .accordion-item.active .accordion-content { display: block; }
+    .accordion-item.active { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-text">
+       <span>Strategic Portfolio</span>
+       <span>The New Economy</span>
+    </div>
+  </a>
+  <a href="index.html" class="btn-back">← Back Home</a>
+</nav>
+
+<section class="network-hero">
+  <div class="reveal">
+    <h1>Strategic <em>Distribution</em> & Stakeholders</h1>
+    <div class="mission-box">
+      <p>Revealing opportunities, garnering support and influencing business growth. <strong>The New Economy Magazine</strong> reveals opportunities for business and investment, sharing practical insights and expert analysis to support a stronger Zimbabwe.</p>
+    </div>
+  </div>
+</section>
+
+<h2 class="section-title reveal">The Ecosystem</h2>
+<div class="ecosystem-grid">
+  <!-- 1. Government Ministries -->
+  <div class="stakeholder-card reveal">
+    <h3>Government Ministries</h3>
+    <ul>
+      <li>Ministry of Finance, Economic Development and Investment Promotion</li>
+      <li>Ministry of Industry and Commerce</li>
+      <li>Ministry of Information, Publicity and Broadcasting Services</li>
+      <li>Ministry of Youth Empowerment, Development and Vocational Training</li>
+      <li>Ministry of Lands, Agriculture, Fisheries, Water and Rural Development</li>
+      <li>Ministry of Mines and Mining Development</li>
+      <li>Ministry of Energy and Power Development</li>
+      <li>Ministry of Transport and Infrastructural Development</li>
+      <li>Ministry of Tourism and Hospitality Industry</li>
+      <li>Ministry of Higher and Tertiary Education, Innovation, Science and Tech</li>
+      <li>Ministry of Women Affairs, Community, Small and Medium Enterprises</li>
+    </ul>
+  </div>
+
+  <!-- 2. Gov Departments -->
+  <div class="stakeholder-card reveal">
+    <h3>Gov Departments & Agencies</h3>
+    <ul>
+      <li>ZIDA (Zimbabwe Investment and Development Agency)</li>
+      <li>ZimTrade</li>
+      <li>SMEDCO (Small and Medium Enterprises Development Corp)</li>
+      <li>CAAZ (Civil Aviation Authority of Zimbabwe)</li>
+      <li>Roads Authority</li>
+      <li>EMA (Environmental Management Agency)</li>
+      <li>NSSA (National Social Security Authority)</li>
+      <li>INTERPOL Zimbabwe</li>
+      <li>ZIMRA (Zimbabwe Revenue Authority)</li>
+      <li>PRAZ (Procurement Regulatory Authority of Zimbabwe)</li>
+      <li>SAZ (Standards Association of Zimbabwe)</li>
+      <li>ZNCC (Zimbabwe National Chamber of Commerce)</li>
+      <li>CTC (Competition and Tariff Commission)</li>
+    </ul>
+  </div>
+
+  <!-- 3. Financial Services -->
+  <div class="stakeholder-card reveal">
+    <h3>Financial Services Sector</h3>
+    <ul>
+      <li>Reserve Bank of Zimbabwe (RBZ)</li>
+      <li>Deposit Protection Corporation (DPC)</li>
+      <li>Commercial Banks & Building Societies</li>
+      <li>Microfinance Institutions</li>
+      <li>Insurance Companies</li>
+      <li>Pension Fund Administrators</li>
+      <li>Securities and Exchange Commission (SECZ)</li>
+      <li>Stockbroking Firms</li>
+      <li>Fintech Companies</li>
+      <li>Mobile Money Operators</li>
+    </ul>
+  </div>
+
+  <!-- 4. Private Sector -->
+  <div class="stakeholder-card reveal">
+    <h3>Private Sector & Business</h3>
+    <ul>
+      <li>Confederation of Zimbabwe Industry (CZI)</li>
+      <li>Employers' Confederation of Zimbabwe (EMCOZ)</li>
+      <li>Professional Bodies (ICAZ, CIMA, IEZ, etc.)</li>
+      <li>Business Associations (ZHDA, ZTA, ZFU, etc.)</li>
+      <li>Large Corporates and SMEs</li>
+    </ul>
+  </div>
+
+  <!-- 5. Partners -->
+  <div class="stakeholder-card reveal">
+    <h3>Partners & Donors</h3>
+    <ul>
+      <li>African Development Bank (AfDB)</li>
+      <li>World Bank & IFC</li>
+      <li>United Nations Agencies (UNDP, UNICEF, etc.)</li>
+      <li>European Union (EU) Delegation</li>
+      <li>USAID</li>
+      <li>Embassies and High Commissions</li>
+    </ul>
+  </div>
+
+  <!-- 6. Academic/Media -->
+  <div class="stakeholder-card reveal">
+    <h3>Academic & Influencers</h3>
+    <ul>
+      <li>Universities & Polytechnics</li>
+      <li>Research Councils (ZEPARU, CUTS, etc.)</li>
+      <li>Libraries and Innovation Hubs</li>
+      <li>Print, Broadcast and Online Media</li>
+      <li>Journalists, Analysts and Economists</li>
+      <li>Social Media Influencers</li>
+    </ul>
+  </div>
+</div>
+
+<div class="mobile-accordions">
+  <!-- Mobile Grid Accordion items here -->
+  <div class="accordion-item" onclick="toggleAccordion(this)">
+    <div class="accordion-header">Gov Ministries <span>+</span></div>
+    <div class="accordion-content">
+      <ul>
+        <li>Finance, Econ Development & Investment</li>
+        <li>Industry and Commerce</li>
+        <li>Information & Broadcasting</li>
+        <li>Youth Empowerment</li>
+        <li>Lands, Agriculture & Water</li>
+        <li>Mines & Energy</li>
+        <li>Transport & Infrastructure</li>
+        <li>Tourism & Hospitality</li>
+        <li>Higher & Tertiary Education</li>
+        <li>Women Affairs & SMEs</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion-item" onclick="toggleAccordion(this)">
+    <div class="accordion-header">Gov Agencies <span>+</span></div>
+    <div class="accordion-content">
+      <ul>
+        <li>ZIDA & ZimTrade</li>
+        <li>SMEDCO</li>
+        <li>CAAZ & Roads Authority</li>
+        <li>EMA & NSSA</li>
+        <li>ZIMRA & PRAZ</li>
+        <li>SAZ & ZNCC</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion-item" onclick="toggleAccordion(this)">
+    <div class="accordion-header">Finance <span>+</span></div>
+    <div class="accordion-content">
+      <ul>
+        <li>RBZ & DPC</li>
+        <li>Banks & Microfinance</li>
+        <li>Insurance & Pensions</li>
+        <li>SEZC & Fintech</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion-item" onclick="toggleAccordion(this)">
+    <div class="accordion-header">Business <span>+</span></div>
+    <div class="accordion-content">
+      <ul>
+        <li>CZI & EMCOZ</li>
+        <li>Professional Bodies</li>
+        <li>Business Associations</li>
+        <li>Corporates & SMEs</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<section class="distribution">
+  <div class="reveal">
+    <div class="section-label" style="justify-content: center;"><span>Distribution</span></div>
+    <h2 class="section-title" style="margin-top:0.5rem; color:var(--white)">Strategic Channels</h2>
+    <div class="channels-grid">
+      <div class="channel-item">
+        <div class="channel-icon">✉</div>
+        <span>Direct Mail</span>
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon">🏢</div>
+        <span>Corporate Drop-offs</span>
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon">🤝</div>
+        <span>Conferences</span>
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon">🌐</div>
+        <span>Digital Access</span>
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon">📱</div>
+        <span>Social Media</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 6rem 4rem; text-align: center;">
+  <div class="reveal">
+    <h2 class="section-title">Join The Conversation</h2>
+    <p style="color:var(--grey); margin-bottom: 2rem;">Connecting policy, business and opportunity.</p>
+    <a href="index.html#newsletter" class="btn-back">Subscribe to the Edition</a>
+  </div>
+</section>
+
+<script>
+  function toggleAccordion(el) {
+    el.classList.toggle('active');
+    const span = el.querySelector('span');
+    span.innerText = el.classList.contains('active') ? '−' : '+';
+  }
+
+  // Reveal logic
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
