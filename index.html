@@ -2259,15 +2259,23 @@
   const animateCounter = (el) => {
     const target = +el.getAttribute('data-target');
     const suffix = el.getAttribute('data-suffix') || '';
-    const speed = 2500; // Adjusted for better visibility
-    let start = 0;
+    // Small numbers (like 9 or 4) need to be much slower to be visible
+    const speed = target < 100 ? 4000 : 2500; 
     const startTime = performance.now();
 
     const update = (now) => {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / speed, 1);
-      // Ease out expo
-      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      
+      let ease;
+      if (target < 100) {
+        // Linear ease for small numbers so they don't 'jump'
+        ease = progress;
+      } else {
+        // Exponential ease for large numbers
+        ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      }
+      
       const val = Math.floor(ease * target);
       el.innerText = val.toLocaleString() + suffix;
       if (progress < 1) requestAnimationFrame(update);
